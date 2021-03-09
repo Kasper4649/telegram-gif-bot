@@ -30,7 +30,7 @@ func OnAnimationHandler(m *tb.Message) {
 		_, _ = bot.Send(m.Chat, "文件上傳失敗，請重試;)")
 		return
 	}
-	out, _ := os.Create(m.Animation.FileName)
+	out, _ := os.Create(m.Animation.FileName + ".mp4")
 	_, _ = io.Copy(out, bytes.NewReader(file))
 	newFile, _ := ioutil.ReadAll(out)
 	_, _ = bot.Reply(m, &tb.File{
