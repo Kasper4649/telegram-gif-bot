@@ -14,7 +14,7 @@ func InitBucket() (*storage.BucketHandle, error) {
 	config := &firebase.Config{
 		StorageBucket: BucketName,
 	}
-	opt := option.WithCredentialsFile(Credentials)
+	opt := option.WithCredentialsJSON([]byte(Credentials))
 	app, err := firebase.NewApp(context.Background(), config, opt)
 	if err != nil {
 		return nil, err
