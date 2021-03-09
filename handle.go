@@ -27,15 +27,9 @@ func OnTextHandler(m *tb.Message) {
 func OnAnimationHandler(m *tb.Message) {
 	_ = bot.Notify(m.Chat, tb.UploadingPhoto)
 	fmt.Println("111111111111111111111111")
-	file, err := ioutil.ReadAll(m.Animation.MediaFile().FileReader)
-	fmt.Println("222222222222222222222222")
-	if err != nil {
-		_, _ = bot.Send(m.Chat, "文件上傳失敗，請重試;)")
-		return
-	}
 	out, _ := os.Create(m.Animation.FileName + ".mp4")
 	fmt.Println("33333333333333333333333")
-	_, _ = io.Copy(out, bytes.NewReader(file))
+	_, _ = io.Copy(out, m.Animation.FileReader)
 	fmt.Println("44444444444444444444444")
 	newFile, _ := ioutil.ReadAll(out)
 	_, _ = bot.Reply(m, &tb.File{
