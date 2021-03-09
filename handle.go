@@ -28,9 +28,5 @@ func OnAnimationHandler(m *tb.Message) {
 		return
 	}
 	_ = b.Notify(m.Chat, tb.UploadingPhoto)
-	if m.Sticker.Animated {
-		_, _ = b.Reply(m, "這是一個動圖")
-	} else {
-		_, _ = b.Reply(m, "這是一個貼圖")
-	}
+	_, _ = b.Reply(m, "這是一個動圖")
 }
