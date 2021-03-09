@@ -21,5 +21,5 @@ func OnAnimationHandler(m *tb.Message) {
 	_ = bot.Notify(m.Chat, tb.UploadingPhoto)
 	//fileURL := m.Animation.File.FileURL
 	//_, _ = bot.Reply(m, fileURL)
-	_, _ = bot.Send(m.Chat, m.Animation.File)
+	_, _ = bot.Reply(m, m.Animation)
 }
