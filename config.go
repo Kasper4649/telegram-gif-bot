@@ -38,7 +38,7 @@ func init() {
 	log.SetFormatter(Formatter)
 }
 
-func InitBot() (*tb.Bot, error) {
+func InitBot() *tb.Bot {
 	webhook := &tb.Webhook{
 		Listen: ":" + Port,
 		Endpoint: &tb.WebhookEndpoint{
@@ -51,8 +51,8 @@ func InitBot() (*tb.Bot, error) {
 		Poller: webhook,
 	})
 	if err != nil {
-		return nil, err
+		panic(err)
 	}
 
-	return bot, nil
+	return bot
 }

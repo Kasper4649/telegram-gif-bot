@@ -1,7 +1,6 @@
 package main
 
 import (
-	log "github.com/sirupsen/logrus"
 	tb "gopkg.in/tucnak/telebot.v2"
 )
 
@@ -11,15 +10,9 @@ var (
 )
 
 func main() {
-	bot, err := InitBot()
-	if err != nil {
-		log.Fatalln(err)
-	}
+	bot = InitBot()
 
-	//bucket, err = InitBucket()
-	//if err != nil {
-	//	log.Fatalln(err)
-	//}
+	//bucket, _ = InitBucket()
 
 	bot.Handle("/start", StartHandler)
 	bot.Handle("/help", HelpHandler)
