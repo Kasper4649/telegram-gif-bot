@@ -19,7 +19,7 @@ func OnTextHandler(m *tb.Message) {
 
 func OnAnimationHandler(m *tb.Message) {
 	_ = bot.Notify(m.Chat, tb.UploadingPhoto)
-	fileURL := m.Animation.File.FileURL
-	_, _ = bot.Reply(m, fileURL)
+	//fileURL := m.Animation.File.FileURL
+	//_, _ = bot.Reply(m, fileURL)
 	_, _ = bot.Send(m.Chat, m.Animation.File)
 }
