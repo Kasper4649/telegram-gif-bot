@@ -1,6 +1,12 @@
 package main
 
-import tb "gopkg.in/tucnak/telebot.v2"
+import (
+	"bytes"
+	tb "gopkg.in/tucnak/telebot.v2"
+	"io"
+	"io/ioutil"
+	"os"
+)
 
 func StartHandler(m *tb.Message) {
 	_ = bot.Notify(m.Chat, tb.Typing)
@@ -19,7 +25,15 @@ func OnTextHandler(m *tb.Message) {
 
 func OnAnimationHandler(m *tb.Message) {
 	_ = bot.Notify(m.Chat, tb.UploadingPhoto)
-	//fileURL := m.Animation.File.FileURL
-	//_, _ = bot.Reply(m, fileURL)
-	_, _ = bot.Reply(m, m.Animation)
+	file, err := ioutil.ReadAll(m.Animation.FileReader)
+	if err != nil {
+		_, _ = bot.Send(m.Chat, "文件上傳失敗，請重試;)")
+		return
+	}
+	out, _ := os.Create(m.Animation.FileName)
+	_, _ = io.Copy(out, bytes.NewReader(file))
+	newFile, _ := ioutil.ReadAll(out)
+	_, _ = bot.Reply(m, &tb.File{
+		FileReader: bytes.NewReader(newFile),
+	})
 }
