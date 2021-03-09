@@ -12,12 +12,16 @@ var (
 	AccessToken string
 	WebhookHost string
 	Port        string
+	Credentials string
+	BucketName  string
 )
 
 func init() {
 	AccessToken = os.Getenv("ACCESS_TOKEN")
 	WebhookHost = os.Getenv("WEBHOOK_HOST")
 	Port = os.Getenv("PORT")
+	Credentials = os.Getenv("CREDENTIALS")
+	BucketName = os.Getenv("BUCKET_NAME")
 }
 
 func init() {
@@ -34,7 +38,7 @@ func init() {
 	log.SetFormatter(Formatter)
 }
 
-func InitBot() *tb.Bot {
+func InitBot() (*tb.Bot, error) {
 	webhook := &tb.Webhook{
 		Listen: ":" + Port,
 		Endpoint: &tb.WebhookEndpoint{
@@ -42,13 +46,13 @@ func InitBot() *tb.Bot {
 		},
 	}
 
-	b, err := tb.NewBot(tb.Settings{
+	bot, err := tb.NewBot(tb.Settings{
 		Token:  AccessToken,
 		Poller: webhook,
 	})
 	if err != nil {
-		log.Fatal(err)
+		return nil, err
 	}
 
-	return b
+	return bot, nil
 }

@@ -1,16 +1,31 @@
 package main
 
-import tb "gopkg.in/tucnak/telebot.v2"
+import (
+	"cloud.google.com/go/storage"
+	log "github.com/sirupsen/logrus"
+	tb "gopkg.in/tucnak/telebot.v2"
+)
 
-var b *tb.Bot
+var (
+	bot    *tb.Bot
+	bucket *storage.BucketHandle
+)
 
 func main() {
-	b = InitBot()
+	bot, err := InitBot()
+	if err != nil {
+		log.Fatalln(err)
+	}
 
-	b.Handle("/start", StartHandler)
-	b.Handle("/help", HelpHandler)
-	b.Handle(tb.OnText, OnTextHandler)
-	b.Handle(tb.OnAnimation, OnAnimationHandler)
+	bucket, err = InitBucket()
+	if err != nil {
+		log.Fatalln(err)
+	}
 
-	b.Start()
+	bot.Handle("/start", StartHandler)
+	bot.Handle("/help", HelpHandler)
+	bot.Handle(tb.OnText, OnTextHandler)
+	bot.Handle(tb.OnAnimation, OnAnimationHandler)
+
+	bot.Start()
 }
