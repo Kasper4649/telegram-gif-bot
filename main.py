@@ -17,4 +17,5 @@ updater.start_webhook(listen="0.0.0.0",
 updater.dispatcher.add_handler(CommandHandler("start", start_handler))
 updater.dispatcher.add_handler(CommandHandler("help", help_handler))
 
+updater.start_polling()
 updater.idle()
