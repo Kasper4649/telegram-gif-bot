@@ -11,6 +11,9 @@ def help_handler(update: Update, context: CallbackContext):
 def text_handler(update: Update, context: CallbackContext):
     update.message.reply_text("不陪聊。")
 
+def animation_handler(update: Update, context: CallbackContext):
+    update.message.reply_text("got it")
+
 def main():
     updater = Updater(TOKEN, use_context=True)
     updater.start_webhook(listen="0.0.0.0",
@@ -22,6 +25,7 @@ def main():
     dispatcher.add_handler(CommandHandler("start", start_handler))
     dispatcher.add_handler(CommandHandler("help", help_handler))
     dispatcher.add_handler(MessageHandler(Filters.text, text_handler))
+    dispatcher.add_handler(MessageHandler(Filters.animation, animation_handler))
 
     updater.start_polling()
     updater.idle()
