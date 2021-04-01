@@ -18,8 +18,8 @@ def main():
     updater = Updater(TOKEN, use_context=True)
     updater.start_webhook(listen="0.0.0.0",
                           port=PORT,
-                          url_path=TOKEN)
-    updater.bot.set_webhook(WEBHOOK_HOST)
+                          url_path=TOKEN,
+                          webhook_url=WEBHOOK_HOST)
 
     dispatcher = updater.dispatcher
     dispatcher.add_handler(CommandHandler("start", start_handler))
@@ -28,3 +28,6 @@ def main():
     dispatcher.add_handler(MessageHandler(Filters.animation, animation_handler))
 
     updater.idle()
+
+if __name__ == '__main__':
+    main()
