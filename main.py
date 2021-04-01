@@ -1,6 +1,8 @@
 from telegram import Update
 from telegram.ext import Updater, CommandHandler, MessageHandler, CallbackContext, Filters
 from config import TOKEN, WEBHOOK_HOST, PORT
+import traceback
+from loguru import logger
 
 def start_handler(update: Update, context: CallbackContext):
     update.message.reply_text("⛔")
@@ -14,6 +16,10 @@ def text_handler(update: Update, context: CallbackContext):
 def animation_handler(update: Update, context: CallbackContext):
     update.message.reply_text("got it")
 
+def handle_error(update, context):
+    logger.error(f"Update: {update} caused error: {context.error}")
+    traceback.print_exc()
+
 def main():
     updater = Updater(TOKEN, use_context=True)
     updater.start_webhook(listen="0.0.0.0",
@@ -26,6 +32,7 @@ def main():
     dispatcher.add_handler(CommandHandler("help", help_handler))
     dispatcher.add_handler(MessageHandler(Filters.text, text_handler))
     dispatcher.add_handler(MessageHandler(Filters.animation, animation_handler))
+    dispatcher.add_error_handler(handle_error)
 
     updater.idle()
 
