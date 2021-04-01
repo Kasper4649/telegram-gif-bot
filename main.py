@@ -27,5 +27,4 @@ def main():
     dispatcher.add_handler(MessageHandler(Filters.text, text_handler))
     dispatcher.add_handler(MessageHandler(Filters.animation, animation_handler))
 
-    updater.start_polling()
     updater.idle()
