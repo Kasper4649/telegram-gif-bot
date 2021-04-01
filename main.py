@@ -1,5 +1,5 @@
 from telegram import Update
-from telegram.ext import Updater, CommandHandler, CallbackContext
+from telegram.ext import Updater, CommandHandler, MessageHandler, CallbackContext, Filters
 from config import TOKEN, WEBHOOK_HOST, PORT
 
 def start_handler(update: Update, context: CallbackContext):
@@ -8,14 +8,20 @@ def start_handler(update: Update, context: CallbackContext):
 def help_handler(update: Update, context: CallbackContext):
     update.message.reply_text("🚫")
 
-updater = Updater(TOKEN, use_context=True)
-updater.start_webhook(listen="0.0.0.0",
-                      port=PORT,
-                      url_path=TOKEN,
-                      webhook_url=WEBHOOK_HOST)
+def text_handler(update: Update, context: CallbackContext):
+    update.message.reply_text("不陪聊。")
 
-updater.dispatcher.add_handler(CommandHandler("start", start_handler))
-updater.dispatcher.add_handler(CommandHandler("help", help_handler))
+def main():
+    updater = Updater(TOKEN, use_context=True)
+    updater.start_webhook(listen="0.0.0.0",
+                          port=PORT,
+                          url_path=TOKEN)
+    updater.bot.set_webhook(WEBHOOK_HOST)
 
-updater.start_polling()
-updater.idle()
+    dispatcher = updater.dispatcher
+    dispatcher.add_handler(CommandHandler("start", start_handler))
+    dispatcher.add_handler(CommandHandler("help", help_handler))
+    dispatcher.add_handler(MessageHandler(Filters.text, text_handler))
+
+    updater.start_polling()
+    updater.idle()
