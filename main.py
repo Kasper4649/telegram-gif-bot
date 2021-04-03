@@ -3,6 +3,7 @@ from telegram.ext import Updater, CommandHandler, MessageHandler, CallbackContex
 from config import TOKEN, WEBHOOK_HOST, PORT
 import traceback
 from loguru import logger
+from moviepy.editor import VideoFileClip
 
 def start_handler(update: Update, context: CallbackContext):
     update.message.reply_text("⛔")
@@ -35,6 +36,10 @@ def main():
     dispatcher.add_error_handler(handle_error)
 
     updater.idle()
+
+# def mp4_to_gif():
+#     clip = VideoFileClip("a.mp4")
+#     clip.write_gif("output.gif")
 
 if __name__ == '__main__':
     main()
