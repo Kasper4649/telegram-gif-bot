@@ -20,10 +20,14 @@ def photo_handler(update: Update, context: CallbackContext):
 
 def animation_handler(update: Update, context: CallbackContext):
     animation = update.message.animation
-    context.bot.get_file(animation.file_id).download(animation.file_name + ".gif")
-    update.message.reply_text(animation.file_name,
+    file_name = animation.file_name.replace(".gif", "")
+
+    context.bot.get_file(animation.file_id).download(file_name)
+    mp4_to_gif(file_name)
+
+    update.message.reply_text(file_name,
                               reply_to_message_id=update.message.message_id)
-    update.message.reply_text(str(os.path.isfile(animation.file_name + ".gif")))
+    update.message.reply_text(str(os.path.isfile(file_name.replace(".mp4", ".gif"))))
 
 def handle_error(update, context):
     logger.error(f"[Update] {update} caused error: {context.error}")
@@ -46,9 +50,9 @@ def main():
 
     updater.idle()
 
-# def mp4_to_gif():
-#     clip = VideoFileClip("a.mp4")
-#     clip.write_gif("output.gif")
+def mp4_to_gif(file_name: str):
+    clip = VideoFileClip(file_name)
+    clip.write_gif(file_name.replace(".mp4", ".gif"))
 
 if __name__ == '__main__':
     main()
