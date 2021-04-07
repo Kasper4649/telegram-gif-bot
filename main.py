@@ -6,12 +6,15 @@ from loguru import logger
 from moviepy.editor import VideoFileClip
 
 def start_handler(update: Update, context: CallbackContext):
+    print(update, update.message.text)
     update.message.reply_text("⛔")
 
 def help_handler(update: Update, context: CallbackContext):
+    print(update, update.message.text)
     update.message.reply_text("🚫")
 
 def text_handler(update: Update, context: CallbackContext):
+    print(update, update.message.text)
     update.message.reply_text("不陪聊。")
 
 def animation_handler(update: Update, context: CallbackContext):
@@ -26,7 +29,7 @@ def main():
     updater.start_webhook(listen="0.0.0.0",
                           port=PORT,
                           url_path=TOKEN,
-                          webhook_url=WEBHOOK_HOST)
+                          webhook_url=WEBHOOK_HOST + TOKEN)
 
     dispatcher = updater.dispatcher
     dispatcher.add_handler(CommandHandler("start", start_handler))
