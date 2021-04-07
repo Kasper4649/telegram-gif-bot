@@ -59,7 +59,8 @@ def main():
 
 def mp4_to_gif(file_name: str):
     clip = VideoFileClip(file_name)
-    clip.write_gif(file_name.replace(".mp4", ".gif"))
+    file_name = file_name.replace(".mp4", ".gif")
+    clip.write_gif(file_name)
     return file_name
 
 if __name__ == '__main__':
