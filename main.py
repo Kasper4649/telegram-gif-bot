@@ -16,7 +16,7 @@ def text_handler(update: Update, context: CallbackContext):
 
 def animation_handler(update: Update, context: CallbackContext):
     print(update.message)
-    update.message.bot.send_animation(update.message.animation)
+    context.bot.send_animation(update.effective_message.chat_id, update.message.animation)
 
 def handle_error(update, context):
     logger.error(f"Update: {update} caused error: {context.error}")
