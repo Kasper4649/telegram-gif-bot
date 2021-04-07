@@ -3,8 +3,10 @@ from telegram.ext import Updater, CommandHandler, MessageHandler, CallbackContex
 from config import TOKEN, WEBHOOK_HOST, PORT
 import traceback
 from loguru import logger
-import os
+import random
+import string
 from moviepy.editor import VideoFileClip
+from firebase import Firebase
 
 def start_handler(update: Update, context: CallbackContext):
     update.message.reply_text("⛔")
@@ -20,14 +22,17 @@ def photo_handler(update: Update, context: CallbackContext):
 
 def animation_handler(update: Update, context: CallbackContext):
     animation = update.message.animation
-    file_name = animation.file_name.replace(".gif", "")
+    # generate random file name
+    file_name = ''.join(random.sample(string.ascii_letters + string.digits, 8)) + ".mp4"
 
     context.bot.get_file(animation.file_id).download(file_name)
-    mp4_to_gif(file_name)
+    file_name = mp4_to_gif(file_name)
+
+    firebase = Firebase()
+    firebase.upload(open(file_name, 'rb'), file_name)
 
     update.message.reply_text(file_name,
                               reply_to_message_id=update.message.message_id)
-    update.message.reply_text(str(os.path.isfile(file_name.replace(".mp4", ".gif"))))
 
 def handle_error(update, context):
     logger.error(f"[Update] {update} caused error: {context.error}")
@@ -53,6 +58,7 @@ def main():
 def mp4_to_gif(file_name: str):
     clip = VideoFileClip(file_name)
     clip.write_gif(file_name.replace(".mp4", ".gif"))
+    return file_name
 
 if __name__ == '__main__':
     main()
