@@ -1,11 +1,14 @@
 from telegram import Update
 from telegram.ext import Updater, CommandHandler, MessageHandler, CallbackContext, Filters
-from config import TOKEN, WEBHOOK_HOST, PORT, FIREBASE
+from config import TOKEN, WEBHOOK_HOST, PORT
 import traceback
 from loguru import logger
 import random
 import string
 from moviepy.editor import VideoFileClip
+from firebase import Firebase
+
+firebase = Firebase()
 
 def start_handler(update: Update, context: CallbackContext):
     update.message.reply_text("⛔")
@@ -28,7 +31,7 @@ def animation_handler(update: Update, context: CallbackContext):
     file_name = mp4_to_gif(file_name)
 
     with open(file_name, "rb") as f:
-        FIREBASE.upload(f, file_name)
+        firebase.upload(f, file_name)
 
     update.message.reply_text(file_name,
                               reply_to_message_id=update.message.message_id)
