@@ -19,10 +19,11 @@ def photo_handler(update: Update, context: CallbackContext):
     update.message.reply_text("只接受 Animation。")
 
 def animation_handler(update: Update, context: CallbackContext):
-    context.bot.get_file(update.message.animation.file_id).download("test.gif")
-    update.message.reply_animation(update.message.animation,
-                                   reply_to_message_id=update.message.message_id)
-    update.message.reply_text(str(os.path.isfile("test.gif")))
+    animation = update.message.animation
+    context.bot.get_file(animation.file_id).download(animation.file_name + ".gif")
+    update.message.reply_text(animation.file_name,
+                              reply_to_message_id=update.message.message_id)
+    update.message.reply_text(str(os.path.isfile(animation.file_name + ".gif")))
 
 def handle_error(update, context):
     logger.error(f"[Update] {update} caused error: {context.error}")
