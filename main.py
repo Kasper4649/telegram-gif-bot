@@ -14,9 +14,14 @@ def help_handler(update: Update, context: CallbackContext):
 def text_handler(update: Update, context: CallbackContext):
     update.message.reply_text("不陪聊。")
 
+def photo_handler(update: Update, context: CallbackContext):
+    update.message.reply_text("只接受 Animation。")
+
 def animation_handler(update: Update, context: CallbackContext):
     print(update.message)
-    context.bot.send_animation(update.effective_message.chat_id, update.message.animation)
+    context.bot.send_animation(update.effective_message.chat_id,
+                               update.message.animation,
+                               reply_to_message_id=update.message.message_id)
 
 def handle_error(update, context):
     logger.error(f"Update: {update} caused error: {context.error}")
@@ -33,6 +38,7 @@ def main():
     dispatcher.add_handler(CommandHandler("start", start_handler))
     dispatcher.add_handler(CommandHandler("help", help_handler))
     dispatcher.add_handler(MessageHandler(Filters.text, text_handler))
+    dispatcher.add_handler(MessageHandler(~(Filters.text | Filters.animation), photo_handler))
     dispatcher.add_handler(MessageHandler(Filters.animation, animation_handler))
     dispatcher.add_error_handler(handle_error)
 
