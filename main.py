@@ -3,6 +3,7 @@ from telegram.ext import Updater, CommandHandler, MessageHandler, CallbackContex
 from config import TOKEN, WEBHOOK_HOST, PORT
 import traceback
 from loguru import logger
+import os
 from moviepy.editor import VideoFileClip
 
 def start_handler(update: Update, context: CallbackContext):
@@ -18,13 +19,13 @@ def photo_handler(update: Update, context: CallbackContext):
     update.message.reply_text("只接受 Animation。")
 
 def animation_handler(update: Update, context: CallbackContext):
-    print(update.message)
-    context.bot.send_animation(update.effective_message.chat_id,
-                               update.message.animation,
-                               reply_to_message_id=update.message.message_id)
+    context.bot.get_file(update.message.animation.file_id).download("test.gif")
+    update.message.reply_animation(update.message.animation,
+                                   reply_to_message_id=update.message.message_id)
+    update.message.reply_text(str(os.path.isfile("test.gif")))
 
 def handle_error(update, context):
-    logger.error(f"Update: {update} caused error: {context.error}")
+    logger.error(f"[Update] {update} caused error: {context.error}")
     traceback.print_exc()
 
 def main():

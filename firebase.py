@@ -19,7 +19,7 @@ class Firebase(object):
         try:
             blob.upload_from_file(file)
         except Exception as e:
-            logger.error(f"failed to upload: {e}")
+            logger.error(f"[firebase] failed to upload: {e}")
 
     def download(self, file_name):
         file = ""
@@ -27,6 +27,6 @@ class Firebase(object):
         try:
             file = blob.download_as_bytes()
         except Exception as e:
-            logger.error(f"failed to download: {e}")
+            logger.error(f"[firebase] failed to download: {e}")
 
         return file
