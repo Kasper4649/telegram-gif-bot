@@ -14,10 +14,10 @@ class Firebase(object):
         })
         self._bucket = storage.bucket()
 
-    def upload(self, file, file_name):
+    def upload(self, file_name):
         blob = self._bucket.blob(file_name)
         try:
-            blob.upload_from_file(file)
+            blob.upload_from_filename(file_name)
         except Exception as e:
             logger.error(f"[firebase] failed to upload: {e}")
 
