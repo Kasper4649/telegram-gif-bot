@@ -29,9 +29,11 @@ def animation_handler(update: Update, context: CallbackContext):
 
     context.bot.get_file(animation.file_id).download(file_name)
     file_name = mp4_to_gif(file_name)
-    public_url = firebase.upload(file_name)
 
-    update.message.reply_text(public_url,
+    with open(file_name, "rb") as f:
+        firebase.upload(f, file_name)
+
+    update.message.reply_text(file_name,
                               reply_to_message_id=update.message.message_id)
 
 def handle_error(update, context):
