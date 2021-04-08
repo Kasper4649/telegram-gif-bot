@@ -18,6 +18,7 @@ class Firebase(object):
         blob = self._bucket.blob(file_name)
         try:
             blob.upload_from_filename(file_name)
+            blob.make_public()
         except Exception as e:
             logger.error(f"[firebase] failed to upload: {e}")
 
