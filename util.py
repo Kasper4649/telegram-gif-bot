@@ -1,5 +1,5 @@
 from functools import wraps
-from moviepy.editor import VideoFileClip
+import moviepy.editor as mp
 from telegram import ChatAction
 
 def send_action(action):
@@ -22,5 +22,5 @@ typing = send_action(ChatAction.TYPING)
 uploading_video = send_action(ChatAction.UPLOAD_VIDEO)
 
 def mp4_to_gif(file_name, new_file_name):
-    clip = VideoFileClip(file_name)
+    clip = mp.VideoFileClip(file_name, audio=False)
     clip.write_gif(new_file_name)

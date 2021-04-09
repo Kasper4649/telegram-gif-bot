@@ -40,14 +40,14 @@ def animation_handler(update: Update, context: CallbackContext):
     try:
         public_url = firebase.upload(new_file_name)
         logger.info(f"[firebase] uploaded {new_file_name}")
-        message.delete()
         update.message.reply_text(public_url,
                                   reply_to_message_id=update.message.message_id)
     except Exception as e:
-        message.delete()
         logger.error(f"[firebase] failed to upload: {e}")
         update.message.reply_text("unknown error",
                                   reply_to_message_id=update.message.message_id)
+    finally:
+        message.delete()
 
 def error_handler(update, context):
     logger.error(f"[update] {update} caused error: {context.error}")
