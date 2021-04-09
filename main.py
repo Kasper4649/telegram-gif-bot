@@ -7,21 +7,27 @@ import random
 import string
 from moviepy.editor import VideoFileClip
 from firebase import Firebase
+from util import typing, uploading_video
 
 firebase = Firebase()
 
+@typing
 def start_handler(update: Update, context: CallbackContext):
     update.message.reply_text("⛔")
 
+@typing
 def help_handler(update: Update, context: CallbackContext):
     update.message.reply_text("🚫")
 
+@typing
 def text_handler(update: Update, context: CallbackContext):
     update.message.reply_text("不陪聊。")
 
+@typing
 def other_handler(update: Update, context: CallbackContext):
     update.message.reply_text("只接受 Animation。")
 
+@uploading_video
 def animation_handler(update: Update, context: CallbackContext):
     animation = update.message.animation
     # generate random file name
