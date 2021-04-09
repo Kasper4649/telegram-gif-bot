@@ -5,9 +5,8 @@ import traceback
 from loguru import logger
 import random
 import string
-from moviepy.editor import VideoFileClip
 from firebase import Firebase
-from util import typing, uploading_video
+from util import typing, uploading_video, mp4_to_gif
 
 firebase = Firebase()
 
@@ -29,6 +28,7 @@ def other_handler(update: Update, context: CallbackContext):
 
 @uploading_video
 def animation_handler(update: Update, context: CallbackContext):
+    message = update.message.reply_text("please wait :)")
     animation = update.message.animation
     # generate random file name
     file_name = ''.join(random.sample(string.ascii_letters + string.digits, 8)) + ".mp4"
@@ -40,16 +40,17 @@ def animation_handler(update: Update, context: CallbackContext):
     try:
         public_url = firebase.upload(new_file_name)
         logger.info(f"[firebase] uploaded {new_file_name}")
+        message.delete()
         update.message.reply_text(public_url,
                                   reply_to_message_id=update.message.message_id)
     except Exception as e:
+        message.delete()
         logger.error(f"[firebase] failed to upload: {e}")
         update.message.reply_text("unknown error",
                                   reply_to_message_id=update.message.message_id)
 
-
 def error_handler(update, context):
-    logger.error(f"[Update] {update} caused error: {context.error}")
+    logger.error(f"[update] {update} caused error: {context.error}")
     traceback.print_exc()
 
 def main():
@@ -68,10 +69,6 @@ def main():
     dispatcher.add_error_handler(error_handler)
 
     updater.idle()
-
-def mp4_to_gif(file_name, new_file_name):
-    clip = VideoFileClip(file_name)
-    clip.write_gif(new_file_name)
 
 if __name__ == '__main__':
     main()
