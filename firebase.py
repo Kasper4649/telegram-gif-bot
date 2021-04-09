@@ -2,7 +2,6 @@ import firebase_admin
 from firebase_admin import storage, credentials
 from config import FIREBASE_CREDENTIALS, BUCKET_NAME
 import json
-from loguru import logger
 
 class Firebase(object):
 
@@ -16,20 +15,11 @@ class Firebase(object):
 
     def upload(self, file_name):
         blob = self._bucket.blob(file_name)
-        try:
-            blob.upload_from_filename(file_name)
-            blob.make_public()
-        except Exception as e:
-            logger.error(f"[firebase] failed to upload: {e}")
-
+        blob.upload_from_filename(file_name)
+        blob.make_public()
         return blob.public_url
 
     def download(self, file_name):
-        file = ""
         blob = self._bucket.blob(file_name)
-        try:
-            file = blob.download_as_bytes()
-        except Exception as e:
-            logger.error(f"[firebase] failed to download: {e}")
-
+        file = blob.download_as_bytes()
         return file
